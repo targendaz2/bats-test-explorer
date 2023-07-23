@@ -2,13 +2,22 @@
   "name": "bats-test-explorer",
   "displayName": "Bats Test Explorer",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "publisher": "dgrdev",
+  "author": "David Rosenberg",
   "engines": {
     "vscode": "^1.80.0"
   },
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/targendaz2/bats-test-explorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/targendaz2/bats-test-explorer/issues"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
