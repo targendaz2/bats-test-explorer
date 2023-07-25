@@ -41,7 +41,7 @@ suite('Extension Test Suite', () => {
 		assert(testCount >= 1);
 
 		// When getBatsTestListFile() is called
-		const batsTestListFile = await generateBatsTestListFile(testFile1.path);
+		const batsTestListFile = await generateBatsTestListFile(testFile1);
 
 		// A Bats test list file is generated and populated
 		const textDocument = await workspace.openTextDocument(batsTestListFile);

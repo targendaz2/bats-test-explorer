@@ -37,11 +37,11 @@ export async function discoverTestFiles(controller: TestController) {
 	});
 }
 
-export async function generateBatsTestListFile(testsPath: string): Promise<Uri> {
+export async function generateBatsTestListFile(testsPath: Uri): Promise<Uri> {
 	const workspaceFolder = (workspace.workspaceFolders as WorkspaceFolder[])[0].uri;
 
 	const exec = util.promisify(cp.exec);
-	const result = await exec(`npx bats --recursive --no-tempdir-cleanup -c ${testsPath} 2>&1 | awk '/:/ {print $2}'`, { cwd: workspaceFolder.path });
+	const result = await exec(`npx bats --recursive --no-tempdir-cleanup -c ${testsPath.path} 2>&1 | awk '/:/ {print $2}'`, { cwd: workspaceFolder.path });
 	const testListFile = result.stdout.trim() + '/test_list_file.txt';
 	return Uri.file(testListFile);
 }
@@ -49,11 +49,7 @@ export async function generateBatsTestListFile(testsPath: string): Promise<Uri> 
 export async function discoverTestsInFile(controller: TestController, testFile: Uri) {
 	const workspaceFolder = (workspace.workspaceFolders as WorkspaceFolder[])[0].uri;
 
-	const exec = util.promisify(cp.exec);
-	const result = await exec(`npx bats --recursive --no-tempdir-cleanup -c ${testFile.path} | awk '/:/ {print $2}'`, { cwd: workspaceFolder.path });
-	const testListFile = result.stdout.trim() + '/test_list_file.txt';
-
-	console.log(testListFile);
+	const testListFile = await generateBatsTestListFile(testFile);
 	// command.stdout.on('data', function (data) {
 	// 	resolve(data.trim() + '/test_list_file.txt');
 	// });
