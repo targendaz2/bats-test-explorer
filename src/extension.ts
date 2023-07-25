@@ -1,7 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { ExtensionContext, TestController } from 'vscode';
+import { ExtensionContext, TestController, Uri, WorkspaceFolder, workspace } from 'vscode';
+import * as cp from 'child_process';
+import * as util from 'util';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -22,17 +24,41 @@ export async function activate(context: ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
-
-	return {'items': controller.items};
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
 
 export async function discoverTestFiles(controller: TestController) {
-	const testFiles = await vscode.workspace.findFiles('**/*.bats');
+	const testFiles = await workspace.findFiles('**/*.bats');
 	testFiles.forEach(function (value, index, array) {
 		const testItem = controller.createTestItem(value.path, value.path);
 		controller.items.add(testItem);
 	});
+}
+
+export async function generateBatsTestListFile(testsPath: string): Promise<Uri> {
+	const workspaceFolder = (workspace.workspaceFolders as WorkspaceFolder[])[0].uri;
+
+	const exec = util.promisify(cp.exec);
+	const result = await exec(`npx bats --recursive --no-tempdir-cleanup -c ${testsPath} 2>&1 | awk '/:/ {print $2}'`, { cwd: workspaceFolder.path });
+	const testListFile = result.stdout.trim() + '/test_list_file.txt';
+	return Uri.file(testListFile);
+}
+
+export async function discoverTestsInFile(controller: TestController, testFile: Uri) {
+	const workspaceFolder = (workspace.workspaceFolders as WorkspaceFolder[])[0].uri;
+
+	const exec = util.promisify(cp.exec);
+	const result = await exec(`npx bats --recursive --no-tempdir-cleanup -c ${testFile.path} | awk '/:/ {print $2}'`, { cwd: workspaceFolder.path });
+	const testListFile = result.stdout.trim() + '/test_list_file.txt';
+
+	console.log(testListFile);
+	// command.stdout.on('data', function (data) {
+	// 	resolve(data.trim() + '/test_list_file.txt');
+	// });
+	// command.on('close', function (code) {
+	// 	resolve(code);
+	// });
+	// command.on('error', function (err) { reject(err) });
 }
