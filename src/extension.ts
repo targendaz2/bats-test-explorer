@@ -10,7 +10,7 @@ export async function activate(context: ExtensionContext) {
 	const controller = vscode.tests.createTestController('batsTests', 'Bats Tests');
 	context.subscriptions.push(controller);
 
-	await discoverTests(controller);
+	await discoverTestFiles(controller);
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
@@ -29,10 +29,10 @@ export async function activate(context: ExtensionContext) {
 // This method is called when your extension is deactivated
 export function deactivate() {}
 
-export async function discoverTests(controller: TestController) {
+export async function discoverTestFiles(controller: TestController) {
 	const testFiles = await vscode.workspace.findFiles('**/*.bats');
 	testFiles.forEach(function (value, index, array) {
-		const testItem = controller.createTestItem(index.toString(), value.path);
+		const testItem = controller.createTestItem(value.path, value.path);
 		controller.items.add(testItem);
 	});
 }
