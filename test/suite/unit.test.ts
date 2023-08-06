@@ -1,15 +1,23 @@
 import { assert } from 'chai';
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from 'vscode';
-import * as batsTestExplorer from '../../src/extension';
+import { extensions, workspace } from 'vscode';
+import { Utils } from 'vscode-uri';
+
+// import * as batsTestExplorer from '../../src/extension';
 
 suite('Unit Tests', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+	test('Extension activates when opening a workspace with existing Bats tests', async () => {
+		// Setup
+		const workspaceFolder = (workspace.workspaceFolders || [])[0];
+		const testFile = Utils.joinPath(workspaceFolder.uri, 'test/functional_tests.bats');
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
+		// Given a workspace containing Bats test files
+		await workspace.fs.stat(testFile);
+
+		// When that workspace is opened
+
+		// The extension should activate
+		const extension = extensions.getExtension('dgrdev.bats-test-explorer');
+		assert(extension?.isActive);
 	});
 });
