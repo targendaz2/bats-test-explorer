@@ -1,6 +1,9 @@
 import * as path from 'path';
 
 import { runTests } from '@vscode/test-electron';
+import * as fs from 'fs';
+
+import * as tmp from 'tmp-promise';
 
 async function main() {
 	try {
@@ -14,12 +17,16 @@ async function main() {
 
 		const workspaceFolder = path.resolve(__dirname, '../../fixtures/existing-tests-workspace/');
 
-		// Download VS Code, unzip it and run the integration test
-		await runTests({
-			extensionDevelopmentPath,
-			extensionTestsPath,
-			launchArgs: [ workspaceFolder ]
-		});
+		await tmp.withDir(async (result) => {
+			fs.cpSync(workspaceFolder, result.path, { force: true, recursive: true });
+
+			// Download VS Code, unzip it and run the integration test
+			await runTests({
+				extensionDevelopmentPath,
+				extensionTestsPath,
+				launchArgs: [result.path]
+			});
+		}, { unsafeCleanup: true });
 	} catch (err) {
 		console.error('Failed to run tests', err);
 		process.exit(1);
