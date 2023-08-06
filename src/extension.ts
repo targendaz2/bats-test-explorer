@@ -10,10 +10,24 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "bats-test-explorer" is now active!');
 
+	/* eslint-disable @typescript-eslint/naming-convention */
 	return {
-		'tests': {}
+		'tests': {
+			'unit_tests': {
+				'script_tests': [
+					'always_succeeds() always succeeds',
+					'always_fails() always fails'
+				],
+				'standalone_tests': [
+					'this test always passes',
+					'this test always fails'
+				]
+			},
+			'functional_tests': []
+		}
 	};
+	/* eslint-enable */
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

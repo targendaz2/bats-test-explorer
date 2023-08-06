@@ -5,7 +5,7 @@ import { extensions } from 'vscode';
 // import * as batsTestExplorer from '../../src/extension';
 
 suite('Functional Tests', () => {
-	test.skip('Can see discovered tests after opening a project containing Bats tests', async () => {
+	test('Can see discovered tests after opening a project containing Bats tests', async () => {
 		// Setup
 		/* eslint-disable @typescript-eslint/naming-convention */
 		const expectedTests = {
