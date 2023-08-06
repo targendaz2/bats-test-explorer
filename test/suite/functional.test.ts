@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-import { Uri, extensions, workspace } from 'vscode';
+import { extensions } from 'vscode';
 
 // import * as batsTestExplorer from '../../src/extension';
 

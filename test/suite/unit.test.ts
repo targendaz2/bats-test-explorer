@@ -6,18 +6,31 @@ import { Utils } from 'vscode-uri';
 // import * as batsTestExplorer from '../../src/extension';
 
 suite('Unit Tests', () => {
-	test('Extension activates when opening a workspace with existing Bats tests', async () => {
-		// Setup
-		const workspaceFolder = (workspace.workspaceFolders || [])[0];
-		const testFile = Utils.joinPath(workspaceFolder.uri, 'test/functional_tests.bats');
+	const workspaceFolder = (workspace.workspaceFolders || [])[0];
+	const extension = extensions.getExtension('dgrdev.bats-test-explorer');
+	const functionalTestsFile = Utils.joinPath(workspaceFolder.uri, 'test/functional_tests.bats');
 
-		// Given a workspace containing Bats test files
-		await workspace.fs.stat(testFile);
+	suite('Activation Tests', () => {
+		test('Extension activates when opening a workspace with existing Bats tests', async () => {
+			// Given a workspace containing Bats test files
+			await workspace.fs.stat(functionalTestsFile);
 
-		// When that workspace is opened
+			// When that workspace is opened
 
-		// The extension should activate
-		const extension = extensions.getExtension('dgrdev.bats-test-explorer');
-		assert(extension?.isActive);
+			// The extension should be active
+			assert(extension?.isActive);
+		});
+	});
+
+	suite('Public API Tests', () => {
+		test('Extension exposes tests object', async () => {
+			// Given a workspace containing Bats test files
+			await workspace.fs.stat(functionalTestsFile);
+
+			// When that workspace is opened
+
+			// The extension should expose a tests object
+			assert.nestedProperty(extension?.exports, 'tests');
+		});
 	});
 });
