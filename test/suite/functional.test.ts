@@ -1,15 +1,38 @@
 import { assert } from 'chai';
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from 'vscode';
+import { Uri, extensions } from 'vscode';
+
+import { openWorkspaceFolder } from './helpers';
 import * as batsTestExplorer from '../../src/extension';
 
 suite('Functional Tests', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+	test('Can see discovered tests after opening a project containing Bats tests', async () => {
+		// Setup
+		const workspaceFolder = Uri.file(__dirname + '../../../fixtures/existing-tests-workspace/');
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
+		/* eslint-disable @typescript-eslint/naming-convention */
+		const expectedTests = {
+			"unit_tests": {
+				"script_tests": [
+					"always_succeeds() always succeeds",
+					"always_fails() always fails"
+				],
+				"standalone_tests": [
+					"this test always passes",
+					"this test always fails"
+				]
+			},
+			"functional_tests": []
+		};
+		/* eslint-enable */
+
+		// I open an existing project that already contains Bats tests in VS Code.
+		await openWorkspaceFolder(workspaceFolder);
+
+		// I go to the Testing tab and see the Bats tests, structured to match their directory structure.
+		const extension = extensions.getExtension('dgrdev.bats-test-explorer');
+		assert.deepEqual(extension?.exports['tests'], expectedTests);
+
+		// Satisfied, I go back to the Explorer tab and continue working on my project.
 	});
 });
