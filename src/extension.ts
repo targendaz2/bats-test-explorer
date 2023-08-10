@@ -45,5 +45,8 @@ function installBats() {
 }
 
 export function discoverTests(controller: vscode.TestController) {
-
+	['unit_tests', 'functional_tests'].forEach(value => {
+		let testItem = controller.createTestItem(value, value);
+		controller.items.add(testItem);
+	});
 }

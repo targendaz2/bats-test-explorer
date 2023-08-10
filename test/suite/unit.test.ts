@@ -65,7 +65,9 @@ suite('Unit Tests', () => {
 	});
 
 	suite('Test Discovery Tests', () => {
-		test.skip('Can discover Bats test files in a workspace', async () => {
+		test('Can discover Bats test files in a workspace', async () => {
+			await vscode.commands.executeCommand("bats-test-explorer.installBats");
+
 			// Given a workspace containing Bats test files...
 			await vscode.workspace.fs.stat(functionalTestsFile);
 
@@ -76,7 +78,7 @@ suite('Unit Tests', () => {
 			batsTestExplorer.discoverTests(controller);
 
 			// The test controller should contain the Bats test file names
-			['unit_tests', 'functional_tests'].forEach(function (value, index, array) {
+			['unit_tests', 'functional_tests'].forEach(value => {
 				assert.exists(controller.items.get(value));
 			});
 		});
