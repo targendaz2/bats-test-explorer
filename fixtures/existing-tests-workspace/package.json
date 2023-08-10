@@ -1,0 +1,12 @@
+{
+    "name": "existing-tests-workspace",
+    "version": "0.1.0",
+    "description": "",
+    "scripts": {
+        "test": "bats test test"
+    },
+    "directories": {
+        "lib": "src",
+        "test": "test"
+    }
+}
