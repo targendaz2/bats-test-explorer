@@ -28,7 +28,13 @@
   ],
   "main": "./out/src/extension.js",
   "contributes": {
-    "commands": []
+    "commands": [
+      {
+        "command": "bats-test-explorer.installBats",
+        "title": "Install 'Bats' to project",
+        "category": "Shell Command"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

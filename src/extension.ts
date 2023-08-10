@@ -1,14 +1,16 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+
+import * as cp from 'child_process';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "bats-test-explorer" is now active!');
+	let disposable = vscode.commands.registerCommand('bats-test-explorer.installBats', installBats);
+	context.subscriptions.push(disposable);
+
+	// const controller = tests.createTestController('batsTests', 'Bats Tests');
+	// context.subscriptions.push(controller);
 
 	/* eslint-disable @typescript-eslint/naming-convention */
 	return {
@@ -31,3 +33,17 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export function deactivate() { }
+
+function installBats() {
+	const workspaceFolder = (vscode.workspace.workspaceFolders || [])[0];
+	vscode.window.showInformationMessage("Installing Bats...");
+	cp.spawnSync('npm install --save-dev bats', {
+		'cwd': workspaceFolder.uri.fsPath,
+		'shell': true
+	});
+	vscode.window.showInformationMessage("Done installing Bats!");
+}
+
+export function discoverTests(controller: vscode.TestController) {
+
+}

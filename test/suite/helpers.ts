@@ -1,8 +1,11 @@
+import * as vscode from 'vscode';
 import * as cp from 'child_process';
 
 type NodeEnvType = "dev" | "optional" | "peer";
 
 function npmList(npmPackage: string, include?: NodeEnvType[] | null, omit?: NodeEnvType[] | null): boolean {
+    const workspaceFolder = (vscode.workspace.workspaceFolders || [])[0];
+
     let command = `npm ls ${npmPackage}`;
 
     include?.forEach(nodeEnv => {
@@ -13,9 +16,12 @@ function npmList(npmPackage: string, include?: NodeEnvType[] | null, omit?: Node
         command += ` --omit ${nodeEnv}`;
     });
 
-    const result = cp.spawnSync(command).status;
+    const result = cp.spawnSync(command, {
+        'cwd': workspaceFolder.uri.fsPath,
+        'shell': true
+    });
 
-    return (result === 0) ? true : false;
+    return (result.status === 0) ? true : false;
 }
 
 export function isPackageInstalled(npmPackage: string, nodeEnvs?: NodeEnvType[]): boolean {
