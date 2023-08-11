@@ -1,3 +1,4 @@
+import { afterEach, beforeEach } from 'mocha';
 import { assert } from 'chai';
 
 import * as vscode from 'vscode';
@@ -65,14 +66,35 @@ suite('Unit Tests', () => {
 	});
 
 	suite('Test Discovery Tests', () => {
-		test('Can discover Bats test files in a workspace', async () => {
-			await vscode.commands.executeCommand("bats-test-explorer.installBats");
 
-			// Given a workspace containing Bats test files...
+		let controller: vscode.TestController;
+
+		beforeEach(async () => {
+			await vscode.commands.executeCommand("bats-test-explorer.installBats");
+			controller = vscode.tests.createTestController('testController', 'Test Controller');
+		});
+
+		afterEach(async () => {
+			// Cleanup
+			controller.dispose();
+		});
+
+		test('Can discover Bats test files in a workspace', async () => {
+			// Given a workspace containing Bats test files
 			await vscode.workspace.fs.stat(functionalTestsFile);
 
-			// ...and a test controller
-			const controller = vscode.tests.createTestController('testController1', 'Test Controller 1');
+			// When discoverTests() is run
+			batsTestExplorer.discoverTests(controller);
+
+			// The test controller should contain the Bats test file names
+			['unit_tests', 'functional_tests'].forEach(value => {
+				assert.exists(controller.items.get(value));
+			});
+		});
+
+		test.skip('Discovers new Bats test files in a workspace', async () => {
+			// Given a workspace containing Bats test files
+			await vscode.workspace.fs.stat(functionalTestsFile);
 
 			// When discoverTests() is run
 			batsTestExplorer.discoverTests(controller);
