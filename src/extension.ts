@@ -37,12 +37,11 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() { }
 
 function installBats() {
-	vscode.window.showInformationMessage("Installing Bats...");
 	cp.spawnSync('npm install --save-dev bats', {
 		'cwd': utilities.getWorkspaceFolderPath(),
 		'shell': true
 	});
-	vscode.window.showInformationMessage("Done installing Bats!");
+	vscode.window.showInformationMessage('Bats has been installed');
 }
 
 export function discoverTests(controller: vscode.TestController) {
