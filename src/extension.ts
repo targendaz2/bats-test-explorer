@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 
 import * as cp from 'child_process';
 
+import * as utilities from './utilities';
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -35,10 +37,9 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() { }
 
 function installBats() {
-	const workspaceFolder = (vscode.workspace.workspaceFolders || [])[0];
 	vscode.window.showInformationMessage("Installing Bats...");
 	cp.spawnSync('npm install --save-dev bats', {
-		'cwd': workspaceFolder.uri.fsPath,
+		'cwd': utilities.getWorkspaceFolderPath(),
 		'shell': true
 	});
 	vscode.window.showInformationMessage("Done installing Bats!");

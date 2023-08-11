@@ -1,11 +1,10 @@
-import * as vscode from 'vscode';
 import * as cp from 'child_process';
+
+import * as utilities from '../../src/utilities';
 
 type NodeEnvType = "dev" | "optional" | "peer";
 
 function npmList(npmPackage: string, include?: NodeEnvType[] | null, omit?: NodeEnvType[] | null): boolean {
-    const workspaceFolder = (vscode.workspace.workspaceFolders || [])[0];
-
     let command = `npm ls ${npmPackage}`;
 
     include?.forEach(nodeEnv => {
@@ -17,7 +16,7 @@ function npmList(npmPackage: string, include?: NodeEnvType[] | null, omit?: Node
     });
 
     const result = cp.spawnSync(command, {
-        'cwd': workspaceFolder.uri.fsPath,
+        'cwd': utilities.getWorkspaceFolderPath(),
         'shell': true
     });
 
