@@ -38,6 +38,17 @@ suite('Unit Tests', () => {
 			// The extension should be active
 			assert(extension?.isActive);
 		});
+
+		test('Extension exposes its context on activation', async () => {
+			// Given a workspace containing Bats test files
+			await vscode.workspace.fs.stat(functionalTestsFile);
+
+			// When this extension is activated
+			const context = await extension?.activate() as vscode.ExtensionContext;
+
+			// The extension should expose its context
+			assert.equal(context.extension.id, 'dgrdev.bats-test-explorer');
+		});
 	});
 
 	suite('Command Tests', () => {
@@ -50,18 +61,6 @@ suite('Unit Tests', () => {
 
 			// Bats should be installed as a dev dependency
 			assert.isTrue(isPackageInstalled("bats", ["dev"]));
-		});
-	});
-
-	suite('Public API Tests', () => {
-		test('Extension exposes object representing discovered tests', async () => {
-			// Given a workspace containing Bats test files
-			await vscode.workspace.fs.stat(functionalTestsFile);
-
-			// When that workspace is opened
-
-			// The extension should expose a tests object representing the discovered tests
-			assert.deepEqual(extension?.exports['tests'], expectedTests);
 		});
 	});
 

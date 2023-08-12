@@ -15,21 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// context.subscriptions.push(controller);
 
 	/* eslint-disable @typescript-eslint/naming-convention */
-	return {
-		'tests': {
-			'unit_tests': {
-				'script_tests': [
-					'always_succeeds() always succeeds',
-					'always_fails() always fails'
-				],
-				'standalone_tests': [
-					'this test always passes',
-					'this test always fails'
-				]
-			},
-			'functional_tests': []
-		}
-	};
+	return context;
 	/* eslint-enable */
 }
 
