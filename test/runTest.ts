@@ -17,14 +17,14 @@ async function main() {
 
 		const workspaceFolder = path.resolve(__dirname, '../../fixtures/existing-tests-workspace/');
 
-		await tmp.withDir(async (result) => {
-			fs.cpSync(workspaceFolder, result.path, { force: true, recursive: true });
+		await tmp.withDir(async tmpDir => {
+			fs.cpSync(workspaceFolder, tmpDir.path, { force: true, recursive: true });
 
 			// Download VS Code, unzip it and run the integration test
 			await runTests({
 				extensionDevelopmentPath,
 				extensionTestsPath,
-				launchArgs: [result.path]
+				launchArgs: [tmpDir.path]
 			});
 		}, { unsafeCleanup: true });
 	} catch (err) {

@@ -16,6 +16,7 @@
     "bats",
     "bats-core"
   ],
+  "pricing": "Free",
   "repository": {
     "type": "git",
     "url": "https://github.com/targendaz2/bats-test-explorer.git"
