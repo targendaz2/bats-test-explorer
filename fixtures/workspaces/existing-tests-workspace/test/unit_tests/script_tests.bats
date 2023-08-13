@@ -8,7 +8,7 @@ teardown() {
     :
 }
 
-@test "always_succeeds\(\) always succeeds" {
+@test "always_succeeds always succeeds" {
     # Given the always_succeeds() function
 
     # When that function is run
@@ -18,7 +18,7 @@ teardown() {
     [ $status = 0 ]
 }
 
-@test "always_fails\(\) always fails" {
+@test "always_fails always fails" {
     # Given the always_fails() function
 
     # When that function is run
