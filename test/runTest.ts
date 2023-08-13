@@ -15,7 +15,7 @@ async function main() {
 		// Passed to --extensionTestsPath
 		const extensionTestsPath = path.resolve(__dirname, './suite/index');
 
-		const workspaceFolder = path.resolve(__dirname, '../../fixtures/existing-tests-workspace/');
+		const workspaceFolder = path.resolve(__dirname, '../../fixtures/workspaces/existing-tests-workspace/');
 
 		await tmp.withDir(async tmpDir => {
 			fs.cpSync(workspaceFolder, tmpDir.path, { force: true, recursive: true });
